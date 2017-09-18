@@ -5,8 +5,8 @@ public class INVOKEINTERFACE extends Instruction {
   public String name;
   public String desc;
 
-  public INVOKEINTERFACE(int iid, int mid, String owner, String name, String desc) {
-    super(iid, mid);
+  public INVOKEINTERFACE(long tid, int iid, int mid, String owner, String name, String desc) {
+    super(tid,iid, mid);
     this.owner = owner;
     this.name = name;
     this.desc = desc;
@@ -15,6 +15,12 @@ public class INVOKEINTERFACE extends Instruction {
   public void visit(IVisitor visitor) {
     visitor.visitINVOKEINTERFACE(this);
   }
+  public INVOKEINTERFACE(int iid, int mid, String owner, String name, String desc) {
+	    super(iid, mid);
+	    this.owner = owner;
+	    this.name = name;
+	    this.desc = desc;
+	  }
 
   @Override
   public String toString() {
@@ -22,6 +28,7 @@ public class INVOKEINTERFACE extends Instruction {
         + iid
         + " mid="
         + mid
+        + " tid=" + tid
         + " owner="
         + owner
         + " name="

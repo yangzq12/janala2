@@ -7,9 +7,17 @@ public class SPECIAL extends Instruction {
   public int i;
 
   public SPECIAL(int i) {
-    super(-1, -1);
+    super(-1,-1, -1);
     this.i = i;
   }
+  
+  public SPECIAL(long tid, int i) {
+	    super(tid,-1, -1);
+	    this.i = i;
+	  }
+  
+  
+  
 
   public void visit(IVisitor visitor) {
     visitor.visitSPECIAL(this);
@@ -17,6 +25,6 @@ public class SPECIAL extends Instruction {
 
   @Override
   public String toString() {
-    return "SPECIAL i=" + i;
+    return "SPECIAL i=" + i+ " tid="+tid;
   }
 }

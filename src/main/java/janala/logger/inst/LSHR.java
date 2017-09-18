@@ -1,9 +1,13 @@
 package janala.logger.inst;
 
 public class LSHR extends Instruction {
-  public LSHR(int iid, int mid) {
-    super(iid, mid);
+  public LSHR(long tid,int iid, int mid) {
+    super(tid,iid, mid);
   }
+  
+  public LSHR(int iid, int mid) {
+	    super(iid, mid);
+	  }
 
   public void visit(IVisitor visitor) {
     visitor.visitLSHR(this);
@@ -11,6 +15,6 @@ public class LSHR extends Instruction {
 
   @Override
   public String toString() {
-    return "LSHR iid=" + iid + " mid=" + mid;
+    return "LSHR iid=" + iid + " mid=" + mid+ " tid=" + tid;
   }
 }

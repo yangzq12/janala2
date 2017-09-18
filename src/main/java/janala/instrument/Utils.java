@@ -33,9 +33,15 @@ public class Utils implements Opcodes {
   }
 
   public static void addSpecialInsn(MethodVisitor mv, int val) {
+	  addThreadId(mv);
     addBipushInsn(mv, val);
     mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, 
-      "SPECIAL", "(I)V", false);
+      "SPECIAL", "(JI)V", false);
+  }
+  
+  public static void addThreadId(MethodVisitor mv){
+	  mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread", "()Ljava/lang/Thread;",false);
+	  mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Thread", "getId", "()J", false);
   }
 
   /** Add a set to code to read the given type from the top of the concrete stack
@@ -50,64 +56,85 @@ public class Utils implements Opcodes {
     }
     switch (t.getSort()) {
       case Type.DOUBLE:
+    	  
         mv.visitInsn(DUP2);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "double", "(D)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "double", "(DJ)V", false);
         break;
       case Type.LONG:
+    	 
         mv.visitInsn(DUP2);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "long", "(J)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "long", "(JJ)V", false);
         break;
       case Type.ARRAY:
+    	  
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
             INVOKESTATIC,
             Config.instance.analysisClass,
             methodNamePrefix + "Object",
-            "(Ljava/lang/Object;)V", false);
+            "(Ljava/lang/Object;J)V", false);
         break;
       case Type.BOOLEAN:
+    	
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "boolean", "(Z)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "boolean", "(ZJ)V", false);
         break;
       case Type.BYTE:
+    	  
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "byte", "(B)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "byte", "(BJ)V", false);
         break;
       case Type.CHAR:
+    	  
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "char", "(C)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "char", "(CJ)V", false);
         break;
       case Type.FLOAT:
+    	
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "float", "(F)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "float", "(FJ)V", false);
         break;
       case Type.INT:
+   
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "int", "(I)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "int", "(IJ)V", false);
         break;
       case Type.OBJECT:
+ 
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
             INVOKESTATIC,
             Config.instance.analysisClass,
             methodNamePrefix + "Object",
-            "(Ljava/lang/Object;)V", false);
+            "(Ljava/lang/Object;J)V", false);
         break;
       case Type.SHORT:
+    	  
         mv.visitInsn(DUP);
+        addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "short", "(S)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "short", "(SJ)V", false);
         break;
       case Type.VOID:
+    	  addThreadId(mv);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "void", "()V", false);
+            INVOKESTATIC, Config.instance.analysisClass, methodNamePrefix + "void", "(J)V", false);
         break;
       default:
         System.err.println("Unknown field or method descriptor " + desc);

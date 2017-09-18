@@ -1,6 +1,360 @@
 package janala.logger;
 
 public interface Logger {
+  public void LDC(long tid, int iid, int mid, int c);
+
+  public void LDC(long tid, int iid, int mid, long c);
+
+  public void LDC(long tid, int iid, int mid, float c);
+
+  public void LDC(long tid, int iid, int mid, double c);
+
+  public void LDC(long tid, int iid, int mid, String c);
+
+  public void LDC(long tid, int iid, int mid, Object c);
+
+  public void IINC(long tid, int iid, int mid, int var, int increment);
+
+  public void MULTIANEWARRAY(long tid, int iid, int mid, String desc, int dims);
+
+  public void LOOKUPSWITCH(long tid, int iid, int mid, int dflt, int[] keys, int[] labels);
+
+  
+  public void TABLESWITCH(long tid, int iid, int mid, int min, int max, int dflt, int[] labels);
+
+  public void IFEQ(long tid, int iid, int mid, int label);
+
+  public void IFNE(long tid, int iid, int mid, int label);
+
+  public void IFLT(long tid, int iid, int mid, int label);
+
+  public void IFGE(long tid, int iid, int mid, int label);
+
+  public void IFGT(long tid, int iid, int mid, int label);
+
+  public void IFLE(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPEQ(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPNE(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPLT(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPGE(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPGT(long tid, int iid, int mid, int label);
+
+  public void IF_ICMPLE(long tid, int iid, int mid, int label);
+
+  public void IF_ACMPEQ(long tid, int iid, int mid, int label);
+
+  public void IF_ACMPNE(long tid, int iid, int mid, int label);
+
+  public void GOTO(long tid, int iid, int mid, int label);
+
+  public void JSR(long tid, int iid, int mid, int label);
+
+  public void IFNULL(long tid, int iid, int mid, int label);
+
+  public void IFNONNULL(long tid, int iid, int mid, int label);
+
+  public void INVOKEVIRTUAL(long tid, int iid, int mid, String owner, String name, String desc);
+
+  public void INVOKESPECIAL(long tid, int iid, int mid, String owner, String name, String desc);
+
+  public void INVOKESTATIC(long tid, int iid, int mid, String owner, String name, String desc);
+
+  public void INVOKEINTERFACE(long tid, int iid, int mid, String owner, String name, String desc);
+
+  public void GETSTATIC(long tid, int iid, int mid, int cIdx, int fIdx, String desc);
+
+  public void PUTSTATIC(long tid, int iid, int mid, int cIdx, int fIdx, String desc);
+
+  public void GETFIELD(long tid, int iid, int mid, int cIdx, int fIdx, String desc);
+
+  public void PUTFIELD(long tid, int iid, int mid, int cIdx, int fIdx, String desc);
+
+  public void NEW(long tid, int iid, int mid, String type, int cIdx);
+
+  public void ANEWARRAY(long tid, int iid, int mid, String type);
+
+  public void CHECKCAST(long tid, int iid, int mid, String type);
+
+  public void INSTANCEOF(long tid, int iid, int mid, String type);
+
+  public void BIPUSH(long tid, int iid, int mid, int value);
+
+  public void SIPUSH(long tid, int iid, int mid, int value);
+
+  public void NEWARRAY(long tid, int iid, int mid);
+
+  public void ILOAD(long tid, int iid, int mid, int var);
+
+  public void LLOAD(long tid, int iid, int mid, int var);
+
+  public void FLOAD(long tid, int iid, int mid, int var);
+
+  public void DLOAD(long tid, int iid, int mid, int var);
+
+  public void ALOAD(long tid, int iid, int mid, int var);
+
+  public void ISTORE(long tid, int iid, int mid, int var);
+
+  public void LSTORE(long tid, int iid, int mid, int var);
+
+  public void FSTORE(long tid, int iid, int mid, int var);
+
+  public void DSTORE(long tid, int iid, int mid, int var);
+
+  public void ASTORE(long tid, int iid, int mid, int var);
+
+  public void RET(long tid, int iid, int mid, int var);
+
+  public void NOP(long tid, int iid, int mid);
+
+  public void ACONST_NULL(long tid, int iid, int mid);
+
+  public void ICONST_M1(long tid, int iid, int mid);
+
+  public void ICONST_0(long tid, int iid, int mid);
+
+  public void ICONST_1(long tid, int iid, int mid);
+
+  public void ICONST_2(long tid, int iid, int mid);
+
+  public void ICONST_3(long tid, int iid, int mid);
+
+  public void ICONST_4(long tid, int iid, int mid);
+
+  public void ICONST_5(long tid, int iid, int mid);
+
+  public void LCONST_0(long tid, int iid, int mid);
+
+  public void LCONST_1(long tid, int iid, int mid);
+
+  public void FCONST_0(long tid, int iid, int mid);
+
+  public void FCONST_1(long tid, int iid, int mid);
+
+  public void FCONST_2(long tid, int iid, int mid);
+
+  public void DCONST_0(long tid, int iid, int mid);
+
+  public void DCONST_1(long tid, int iid, int mid);
+
+  public void IALOAD(long tid, int iid, int mid);
+
+  public void LALOAD(long tid, int iid, int mid);
+
+  public void FALOAD(long tid, int iid, int mid);
+
+  public void DALOAD(long tid, int iid, int mid);
+
+  public void AALOAD(long tid, int iid, int mid);
+
+  public void BALOAD(long tid, int iid, int mid);
+
+  public void CALOAD(long tid, int iid, int mid);
+
+  public void SALOAD(long tid, int iid, int mid);
+
+  public void IASTORE(long tid, int iid, int mid);
+
+  public void LASTORE(long tid, int iid, int mid);
+
+  public void FASTORE(long tid, int iid, int mid);
+
+  public void DASTORE(long tid, int iid, int mid);
+
+  public void AASTORE(long tid, int iid, int mid);
+
+  public void BASTORE(long tid, int iid, int mid);
+
+  public void CASTORE(long tid, int iid, int mid);
+
+  public void SASTORE(long tid, int iid, int mid);
+
+  public void POP(long tid, int iid, int mid);
+
+  public void POP2(long tid, int iid, int mid);
+
+  public void DUP(long tid, int iid, int mid);
+
+  public void DUP_X1(long tid, int iid, int mid);
+
+  public void DUP_X2(long tid, int iid, int mid);
+
+  public void DUP2(long tid, int iid, int mid);
+
+  public void DUP2_X1(long tid, int iid, int mid);
+
+  public void DUP2_X2(long tid, int iid, int mid);
+
+  public void SWAP(long tid, int iid, int mid);
+
+  public void IADD(long tid, int iid, int mid);
+
+  public void LADD(long tid, int iid, int mid);
+
+  public void FADD(long tid, int iid, int mid);
+
+  public void DADD(long tid, int iid, int mid);
+
+  public void ISUB(long tid, int iid, int mid);
+
+  public void LSUB(long tid, int iid, int mid);
+
+  public void FSUB(long tid, int iid, int mid);
+
+  public void DSUB(long tid, int iid, int mid);
+
+  public void IMUL(long tid, int iid, int mid);
+
+  public void LMUL(long tid, int iid, int mid);
+
+  public void FMUL(long tid, int iid, int mid);
+
+  public void DMUL(long tid, int iid, int mid);
+
+  public void IDIV(long tid, int iid, int mid);
+
+  public void LDIV(long tid, int iid, int mid);
+
+  public void FDIV(long tid, int iid, int mid);
+
+  public void DDIV(long tid, int iid, int mid);
+
+  public void IREM(long tid, int iid, int mid);
+
+  public void LREM(long tid, int iid, int mid);
+
+  public void FREM(long tid, int iid, int mid);
+
+  public void DREM(long tid, int iid, int mid);
+
+  public void INEG(long tid, int iid, int mid);
+
+  public void LNEG(long tid, int iid, int mid);
+
+  public void FNEG(long tid, int iid, int mid);
+
+  public void DNEG(long tid, int iid, int mid);
+
+  public void ISHL(long tid, int iid, int mid);
+
+  public void LSHL(long tid, int iid, int mid);
+
+  public void ISHR(long tid, int iid, int mid);
+
+  public void LSHR(long tid, int iid, int mid);
+
+  public void IUSHR(long tid, int iid, int mid);
+
+  public void LUSHR(long tid, int iid, int mid);
+
+  public void IAND(long tid, int iid, int mid);
+
+  public void LAND(long tid, int iid, int mid);
+
+  public void IOR(long tid, int iid, int mid);
+
+  public void LOR(long tid, int iid, int mid);
+
+  public void IXOR(long tid, int iid, int mid);
+
+  public void LXOR(long tid, int iid, int mid);
+
+  public void I2L(long tid, int iid, int mid);
+
+  public void I2F(long tid, int iid, int mid);
+
+  public void I2D(long tid, int iid, int mid);
+
+  public void L2I(long tid, int iid, int mid);
+
+  public void L2F(long tid, int iid, int mid);
+
+  public void L2D(long tid, int iid, int mid);
+
+  public void F2I(long tid, int iid, int mid);
+
+  public void F2L(long tid, int iid, int mid);
+
+  public void F2D(long tid, int iid, int mid);
+
+  public void D2I(long tid, int iid, int mid);
+
+  public void D2L(long tid, int iid, int mid);
+
+  public void D2F(long tid, int iid, int mid);
+
+  public void I2B(long tid, int iid, int mid);
+
+  public void I2C(long tid, int iid, int mid);
+
+  public void I2S(long tid, int iid, int mid);
+
+  public void LCMP(long tid, int iid, int mid);
+
+  public void FCMPL(long tid, int iid, int mid);
+
+  public void FCMPG(long tid, int iid, int mid);
+
+  public void DCMPL(long tid, int iid, int mid);
+
+  public void DCMPG(long tid, int iid, int mid);
+
+  public void IRETURN(long tid, int iid, int mid);
+
+  public void LRETURN(long tid, int iid, int mid);
+
+  public void FRETURN(long tid, int iid, int mid);
+
+  public void DRETURN(long tid, int iid, int mid);
+
+  public void ARETURN(long tid, int iid, int mid);
+
+  public void RETURN(long tid, int iid, int mid);
+
+  public void ARRAYLENGTH(long tid, int iid, int mid);
+
+  public void ATHROW(long tid, int iid, int mid);
+
+  public void MONITORENTER(long tid, int iid, int mid);
+
+  public void MONITOREXIT(long tid, int iid, int mid);
+
+  public void GETVALUE_double(double v,long tid);
+
+  public void GETVALUE_long( long v,long tid);
+
+  public void GETVALUE_Object( Object v,long tid);
+
+  public void GETVALUE_boolean( boolean v,long tid);
+
+  public void GETVALUE_byte( byte v,long tid);
+
+  public void GETVALUE_char( char v,long tid);
+
+  public void GETVALUE_float( float v,long tid);
+
+  public void GETVALUE_int( int v,long tid);
+
+  public void GETVALUE_short( short v,long tid);
+
+  public void GETVALUE_void(long tid);
+
+  public void INVOKEMETHOD_EXCEPTION(long tid);
+
+  public void INVOKEMETHOD_END(long tid);
+
+  public void MAKE_SYMBOLIC(long tid);
+
+  public void SPECIAL(long tid, int i);
+
+  public void flush();
+  
+  //
   public void LDC(int iid, int mid, int c);
 
   public void LDC(int iid, int mid, long c);
@@ -322,7 +676,7 @@ public interface Logger {
   public void MONITORENTER(int iid, int mid);
 
   public void MONITOREXIT(int iid, int mid);
-
+  
   public void GETVALUE_double(double v);
 
   public void GETVALUE_long(long v);
@@ -350,6 +704,4 @@ public interface Logger {
   public void MAKE_SYMBOLIC();
 
   public void SPECIAL(int i);
-
-  public void flush();
 }

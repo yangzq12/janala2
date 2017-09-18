@@ -3,24 +3,27 @@ package tests;
 import catg.CATG;
 
 public class Testme {
-    private static int foo(int y) {
-        return 2*y;
-    }
+    public static int x = 0, y, z;
 
-    public static void testme(int x,int y){
-        int z = foo(y);
-        if(z==x){
-            if(x>y+10){
-                System.err.println("Error"); // ERROR
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread() {
+            public void run() {
+                x=0;
+                x= x + 5;
+                y=0;
             }
-
-        }
-    }
-
-    public static void main(String[] args){
-        int x = CATG.readInt(2);
-        int y = CATG.readInt(1);
-        testme(x,y);
-        System.out.println("x = "+x+", y = "+y);
+        };
+        Thread t2 = new Thread() {
+            public void run() {
+                x = x + 17;
+                z=0;
+            }
+        };
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println("x = "+x);
     }
 }
+

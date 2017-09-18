@@ -1,16 +1,22 @@
 package janala.logger.inst;
 
 public class LNEG extends Instruction {
-  public LNEG(int iid, int mid) {
-    super(iid, mid);
+  public LNEG(long tid,int iid, int mid) {
+    super(tid,iid, mid);
   }
 
   public void visit(IVisitor visitor) {
     visitor.visitLNEG(this);
   }
+  
+  public LNEG(int iid, int mid) {
+	    super(iid, mid);
+	  }
 
   @Override
   public String toString() {
-    return "LNEG iid=" + iid + " mid=" + mid;
+    return "LNEG iid=" + iid + " mid=" + mid+ " tid=" + tid;
   }
+  
+  
 }

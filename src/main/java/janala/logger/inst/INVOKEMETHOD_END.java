@@ -3,7 +3,11 @@ package janala.logger.inst;
 public class INVOKEMETHOD_END extends Instruction {
 
   public INVOKEMETHOD_END() {
-    super(-1, -1);
+    super(-1,-1, -1);
+  }
+  
+  public INVOKEMETHOD_END(long tid){
+	  super(tid,-1,-1);
   }
 
   public void visit(IVisitor visitor) {
@@ -12,6 +16,6 @@ public class INVOKEMETHOD_END extends Instruction {
 
   @Override
   public String toString() {
-    return "INVOKEMETHOD_END";
+    return "INVOKEMETHOD_END"+ " tid="+tid;
   }
 }

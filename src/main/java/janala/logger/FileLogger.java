@@ -37,7 +37,7 @@ public class FileLogger extends AbstractLogger {
 
 
   @Override
-  protected void log(Instruction insn) {
+  protected synchronized void log(Instruction insn) {
     if (Config.instance.printTrace) System.out.println(insn);
     try {
       outputStream.writeObject(insn);

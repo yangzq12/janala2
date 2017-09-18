@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="janala/solvers/ChocoSolver.java" kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/asm-all-5.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/automaton-1.11-8.jar"/>
+	<classpathentry kind="lib" path="lib/catg-dev.jar"/>
+	<classpathentry kind="lib" path="lib/emma.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

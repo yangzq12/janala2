@@ -8,7 +8,11 @@ package janala.logger.inst;
 public class MAKE_SYMBOLIC extends Instruction {
 
   public MAKE_SYMBOLIC() {
-    super(-1, -1);
+    super(-1,-1, -1);
+  }
+  
+  public MAKE_SYMBOLIC(long tid){
+	  super(tid,-1,-1);
   }
 
   public void visit(IVisitor visitor) {

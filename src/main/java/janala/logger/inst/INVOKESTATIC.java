@@ -5,8 +5,8 @@ public class INVOKESTATIC extends Instruction {
   public String name;
   public String desc;
 
-  public INVOKESTATIC(int iid, int mid, String owner, String name, String desc) {
-    super(iid, mid);
+  public INVOKESTATIC(long tid, int iid, int mid, String owner, String name, String desc) {
+    super(tid, iid, mid);
     this.owner = owner;
     this.name = name;
     this.desc = desc;
@@ -16,12 +16,20 @@ public class INVOKESTATIC extends Instruction {
     visitor.visitINVOKESTATIC(this);
   }
 
+  public INVOKESTATIC(int iid, int mid, String owner, String name, String desc) {
+	    super(iid, mid);
+	    this.owner = owner;
+	    this.name = name;
+	    this.desc = desc;
+	  }
+  
   @Override
   public String toString() {
     return "INVOKESTATIC iid="
         + iid
         + " mid="
         + mid
+        + " tid=" + tid
         + " owner="
         + owner
         + " name="

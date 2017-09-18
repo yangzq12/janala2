@@ -1,9 +1,13 @@
 package janala.logger.inst;
 
 public class ICONST_1 extends Instruction {
-  public ICONST_1(int iid, int mid) {
-    super(iid, mid);
+  public ICONST_1(long tid, int iid, int mid) {
+    super(tid,iid, mid);
   }
+  
+  public ICONST_1(int iid, int mid) {
+	    super(iid, mid);
+	  }
 
   public void visit(IVisitor visitor) {
     visitor.visitICONST_1(this);
@@ -11,6 +15,6 @@ public class ICONST_1 extends Instruction {
 
   @Override
   public String toString() {
-    return "ICONST_1 iid=" + iid + " mid=" + mid;
+    return "ICONST_1 iid=" + iid + " mid=" + mid+ " tid=" + tid;
   }
 }

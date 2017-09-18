@@ -3,10 +3,15 @@ package janala.logger.inst;
 public class LDC_int extends Instruction {
   public int c;
 
-  public LDC_int(int iid, int mid, int c) {
-    super(iid, mid);
+  public LDC_int(long tid, int iid, int mid, int c) {
+    super(tid,iid, mid);
     this.c = c;
   }
+  
+  public LDC_int(int iid, int mid, int c) {
+	    super(iid, mid);
+	    this.c = c;
+	  }
 
   public void visit(IVisitor visitor) {
     visitor.visitLDC_int(this);
@@ -14,6 +19,6 @@ public class LDC_int extends Instruction {
 
   @Override
   public String toString() {
-    return "LDC_int iid=" + iid + " mid=" + mid + " c=" + c;
+    return "LDC_int iid=" + iid + " mid=" + mid + " tid=" + tid + " c=" + c;
   }
 }

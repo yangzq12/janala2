@@ -5,6 +5,14 @@ public class PUTFIELD extends Instruction {
   public int fIdx;
   public String desc;
 
+  public PUTFIELD(long tid,int iid, int mid, int cIdx, int fIdx, String desc) {
+    super(tid,iid, mid);
+    this.cIdx = cIdx;
+    this.fIdx = fIdx;
+    this.desc = desc;
+  }
+  
+
   public PUTFIELD(int iid, int mid, int cIdx, int fIdx, String desc) {
     super(iid, mid);
     this.cIdx = cIdx;
@@ -22,6 +30,7 @@ public class PUTFIELD extends Instruction {
         + iid
         + " mid="
         + mid
+        + " tid=" + tid
         + " cIdx="
         + cIdx
         + " fIdx="

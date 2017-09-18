@@ -1,9 +1,13 @@
 package janala.logger.inst;
 
 public class LALOAD extends Instruction {
-  public LALOAD(int iid, int mid) {
-    super(iid, mid);
+  public LALOAD(long tid,int iid, int mid) {
+    super(tid,iid, mid);
   }
+  
+  public LALOAD(int iid, int mid) {
+	    super(iid, mid);
+	  }
 
   public void visit(IVisitor visitor) {
     visitor.visitLALOAD(this);
@@ -11,6 +15,6 @@ public class LALOAD extends Instruction {
 
   @Override
   public String toString() {
-    return "LALOAD iid=" + iid + " mid=" + mid;
+    return "LALOAD iid=" + iid + " mid=" + mid+ " tid=" + tid;
   }
 }

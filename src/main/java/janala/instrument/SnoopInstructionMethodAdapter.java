@@ -42,6 +42,11 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
   private static void addBipushInsn(MethodVisitor mv, int val) {
     Utils.addBipushInsn(mv, val);
   }
+  
+  private static void addThreadId(MethodVisitor mv){
+	  Utils.addThreadId(mv);
+	 
+  }
 
   /** Add a GETVALUE call to synchronize the top stack with that of the symbolic stack. */
   private void addValueReadInsn(MethodVisitor mv, String desc, String methodNamePrefix) {
@@ -54,29 +59,32 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
   }
 
   private void addInsn(MethodVisitor mv, String insn, int opcode) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, insn, "(II)V", false);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, insn, "(JII)V", false);
 
     mv.visitInsn(opcode);
   }
 
   /** Add var insn and its instrumentation code. */
   private void addVarInsn(MethodVisitor mv, int var, String insn, int opcode) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     addBipushInsn(mv, var);
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, insn, "(III)V", false);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, insn, "(JIII)V", false);
 
     mv.visitVarInsn(opcode, var);
   }
 
   private void addTypeInsn(MethodVisitor mv, String type, int opcode, String name) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     mv.visitLdcInsn(type);
     mv.visitMethodInsn(
-      INVOKESTATIC, Config.instance.analysisClass, name, "(IILjava/lang/String;)V", false);
+      INVOKESTATIC, Config.instance.analysisClass, name, "(JIILjava/lang/String;)V", false);
     mv.visitTypeInsn(opcode, type);
   }
 
@@ -496,19 +504,20 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
 
   @Override
   public void visitIntInsn(int opcode, int operand) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     switch (opcode) {
       case BIPUSH:
         addBipushInsn(mv, operand);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "BIPUSH", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "BIPUSH", "(JIII)V", false);
         break;
       case SIPUSH:
         addBipushInsn(mv, operand);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "SIPUSH", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "SIPUSH", "(JIII)V", false);
         break;
       case NEWARRAY:
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "NEWARRAY", "(II)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "NEWARRAY", "(JII)V", false);
         mv.visitIntInsn(opcode, operand);
         addSpecialInsn(mv, 0); // for non-exceptional path
         return;
@@ -522,13 +531,14 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
   public void visitTypeInsn(int opcode, String type) {
     switch (opcode) {
       case NEW:
+    	addThreadId(mv);
         addBipushInsn(mv, instrumentationState.incAndGetId());
         addBipushInsn(mv, instrumentationState.getMid());
         mv.visitLdcInsn(type);
         int cIdx = classNames.get(type);
         addBipushInsn(mv, cIdx);
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, "NEW", "(IILjava/lang/String;I)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, "NEW", "(JIILjava/lang/String;I)V", false);
         mv.visitTypeInsn(opcode, type);
         addSpecialInsn(mv, 0); // for non-exceptional path
 
@@ -554,6 +564,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
 
   @Override
   public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     int cIdx = classNames.get(owner);
@@ -566,7 +577,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
         mv.visitLdcInsn(desc);
 
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, "GETSTATIC", "(IIIILjava/lang/String;)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, "GETSTATIC", "(JIIIILjava/lang/String;)V", false);
 
         mv.visitFieldInsn(opcode, owner, name, desc);
         addSpecialInsn(mv, 0); // for non-exceptional path
@@ -578,7 +589,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
         mv.visitLdcInsn(desc);
 
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, "PUTSTATIC", "(IIIILjava/lang/String;)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, "PUTSTATIC", "(JIIIILjava/lang/String;)V", false);
         mv.visitFieldInsn(opcode, owner, name, desc);
         addSpecialInsn(mv, 0); // for non-exceptional path
         break;
@@ -588,7 +599,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
         mv.visitLdcInsn(desc);
 
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, "GETFIELD", "(IIIILjava/lang/String;)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, "GETFIELD", "(JIIIILjava/lang/String;)V", false);
         mv.visitFieldInsn(opcode, owner, name, desc);
         addSpecialInsn(mv, 0); // for non-exceptional path
         addValueReadInsn(mv, desc, "GETVALUE_");
@@ -599,7 +610,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
         mv.visitLdcInsn(desc);
 
         mv.visitMethodInsn(
-            INVOKESTATIC, Config.instance.analysisClass, "PUTFIELD", "(IIIILjava/lang/String;)V", false);
+            INVOKESTATIC, Config.instance.analysisClass, "PUTFIELD", "(JIIIILjava/lang/String;)V", false);
         mv.visitFieldInsn(opcode, owner, name, desc);
         addSpecialInsn(mv, 0); // for non-exceptional path
         break;
@@ -624,6 +635,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
   }
 
   private void addMethodWithTryCatch(int opcode, String owner, String name, String desc, boolean itf) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
 
@@ -634,7 +646,7 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
      INVOKESTATIC,
      Config.instance.analysisClass,
      getMethodName(opcode),
-     "(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", false);
+     "(JIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", false);
       // Wrap the method call in a try-catch block
     Label begin = new Label();
     Label handler = new Label();
@@ -647,19 +659,26 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
     mv.visitJumpInsn(GOTO, end);
 
     mv.visitLabel(handler);
+    addThreadId(mv);
     mv.visitMethodInsn(
-     INVOKESTATIC, Config.instance.analysisClass, "INVOKEMETHOD_EXCEPTION", "()V", false);
+     INVOKESTATIC, Config.instance.analysisClass, "INVOKEMETHOD_EXCEPTION", "(J)V", false);
     mv.visitInsn(ATHROW);
 
     mv.visitLabel(end);
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "INVOKEMETHOD_END", "()V", false);
+    addThreadId(mv);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "INVOKEMETHOD_END", "(J)V", false);
 
     addValueReadInsn(mv, desc, "GETVALUE_");
   }
 
   @Override
   public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-    if (opcode == INVOKESPECIAL && name.equals("<init>")) {
+//    if(opcode == INVOKEVIRTUAL && owner.equals("java/lang/Thread") && name.equals("join")) {
+//    	System.out.println("#### This is a join!!!");
+//    	mv.visitMethodInsn(opcode, owner, name, desc, itf);
+//    	return;
+//    }
+	if (opcode == INVOKESPECIAL && name.equals("<init>")) {
       if (isInit) {
         // This code is already inside an init method.
         //
@@ -686,111 +705,112 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
   @Override
   public void visitJumpInsn(int opcode, Label label) {
     int iid3;
+    addThreadId(mv);
     addBipushInsn(mv, iid3 = instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     addBipushInsn(mv, System.identityHashCode(label)); // label.getOffset()
     switch (opcode) {
       case IFEQ:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFEQ", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFEQ", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFNE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFLT:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFLT", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFLT", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFGE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFGE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFGE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFGT:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFGT", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFGT", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFLE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFLE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFLE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPEQ:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPEQ", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPEQ", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPNE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPNE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPNE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPLT:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPLT", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPLT", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPGE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPGE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPGE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPGT:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPGT", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPGT", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ICMPLE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPLE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ICMPLE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ACMPEQ:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ACMPEQ", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ACMPEQ", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IF_ACMPNE:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ACMPNE", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IF_ACMPNE", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case GOTO:
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "GOTO", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "GOTO", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         break;
       case JSR:
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "JSR", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "JSR", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         break;
       case IFNULL:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNULL", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNULL", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
       case IFNONNULL:
         coverage.addBranchCount(iid3);
-        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNONNULL", "(III)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IFNONNULL", "(JIII)V", false);
         mv.visitJumpInsn(opcode, label);
         addSpecialInsn(mv, 1); // for true path
         break;
@@ -801,40 +821,43 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
 
   @Override
   public void visitLdcInsn(Object cst) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     mv.visitLdcInsn(cst);
     if (cst instanceof Integer) {
-      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(III)V", false);
+      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(JIII)V", false);
     } else if (cst instanceof Long) {
-      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(IIJ)V", false);
+      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(JIIJ)V", false);
     } else if (cst instanceof Float) {
-      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(IIF)V", false);
+      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(JIIF)V", false);
     } else if (cst instanceof Double) {
-      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(IID)V", false);
+      mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LDC", "(JIID)V", false);
     } else if (cst instanceof String) {
       mv.visitMethodInsn(
-          INVOKESTATIC, Config.instance.analysisClass, "LDC", "(IILjava/lang/String;)V", false);
+          INVOKESTATIC, Config.instance.analysisClass, "LDC", "(JIILjava/lang/String;)V", false);
     } else {
       mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, 
-          "LDC", "(IILjava/lang/Object;)V", false);
+          "LDC", "(JIILjava/lang/Object;)V", false);
     }
     mv.visitLdcInsn(cst);
   }
 
   @Override
   public void visitIincInsn(int var, int increment) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     addBipushInsn(mv, var);
     addBipushInsn(mv, increment);
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IINC", "(IIII)V", false);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "IINC", "(JIIII)V", false);
     mv.visitIincInsn(var, increment);
   }
 
   @Override
   public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
     int iid3;
+    addThreadId(mv);
     addBipushInsn(mv, iid3 = instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     addBipushInsn(mv, min);
@@ -854,13 +877,14 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
       mv.visitInsn(IASTORE);
     }
 
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "TABLESWITCH", "(IIIII[I)V", false);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "TABLESWITCH", "(JIIIII[I)V", false);
     mv.visitTableSwitchInsn(min, max, dflt, labels);
   }
 
   @Override
   public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
     int iid3;
+    addThreadId(mv);
     addBipushInsn(mv, iid3 = instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     addBipushInsn(mv, System.identityHashCode(dflt)); // label.getOffset()
@@ -887,18 +911,19 @@ public class SnoopInstructionMethodAdapter extends MethodVisitor implements Opco
       mv.visitInsn(IASTORE);
     }
 
-    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LOOKUPSWITCH", "(III[I[I)V", false);
+    mv.visitMethodInsn(INVOKESTATIC, Config.instance.analysisClass, "LOOKUPSWITCH", "(JIII[I[I)V", false);
     mv.visitLookupSwitchInsn(dflt, keys, labels);
   }
 
   @Override
   public void visitMultiANewArrayInsn(String desc, int dims) {
+	addThreadId(mv);
     addBipushInsn(mv, instrumentationState.incAndGetId());
     addBipushInsn(mv, instrumentationState.getMid());
     mv.visitLdcInsn(desc);
     addBipushInsn(mv, dims);
     mv.visitMethodInsn(
-        INVOKESTATIC, Config.instance.analysisClass, "MULTIANEWARRAY", "(IILjava/lang/String;I)V", false);
+        INVOKESTATIC, Config.instance.analysisClass, "MULTIANEWARRAY", "(JIILjava/lang/String;I)V", false);
     mv.visitMultiANewArrayInsn(desc, dims);
     addSpecialInsn(mv, 0); // for non-exceptional path
   }

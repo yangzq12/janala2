@@ -51,18 +51,18 @@ public final class Runner {
     int classIdx = classNames.get(classInternalName);
     int iid = 1;
 
-    DJVM.NEW(iid++, 0, classInternalName, classIdx);
+    DJVM.NEW(0,iid++, 0, classInternalName, classIdx);
     DJVM.SPECIAL(0); // Allocated a new object on stack
 
-    DJVM.DUP(iid++, 0);
-    DJVM.INVOKESPECIAL(iid++, 0, classInternalName, "<init>", "()V");
+    DJVM.DUP(0,iid++, 0);
+    DJVM.INVOKESPECIAL(0,iid++, 0, classInternalName, "<init>", "()V");
     DJVM.INVOKEMETHOD_END();
     Object obj = clazz.newInstance();
     DJVM.GETVALUE_void();
     DJVM.GETVALUE_Object(obj); //Initialized a new object on stack
 
-    DJVM.DUP(iid++, 0);
-    DJVM.INVOKEVIRTUAL(iid++, 0, classInternalName, method.getName(), "()V");
+    DJVM.DUP(0,iid++, 0);
+    DJVM.INVOKEVIRTUAL(0,iid++, 0, classInternalName, method.getName(), "()V");
     method.invoke(obj);
     DJVM.INVOKEMETHOD_END();
     DJVM.GETVALUE_void();

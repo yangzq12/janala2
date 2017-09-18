@@ -6,14 +6,21 @@ public class TABLESWITCH extends Instruction {
   public int dflt;
   public int[] labels;
 
-  public TABLESWITCH(int iid, int mid, int min, int max, int dflt, int[] labels) {
-    super(iid, mid);
+  public TABLESWITCH(long tid,int iid, int mid, int min, int max, int dflt, int[] labels) {
+    super(tid,iid, mid);
     this.min = min;
     this.max = max;
     this.dflt = dflt;
     this.labels = labels;
   }
 
+  public TABLESWITCH(int iid, int mid, int min, int max, int dflt, int[] labels) {
+	    super(iid, mid);
+	    this.min = min;
+	    this.max = max;
+	    this.dflt = dflt;
+	    this.labels = labels;
+	  }
   public void visit(IVisitor visitor) {
     visitor.visitTABLESWITCH(this);
   }
@@ -24,6 +31,7 @@ public class TABLESWITCH extends Instruction {
         + iid
         + " mid="
         + mid
+        + " tid=" + tid
         + " min="
         + min
         + " max="

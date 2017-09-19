@@ -196,3 +196,4 @@ tests.Array1 (3) passed
 ****************** tests.Testme (3) failed!!!
 ****************** tests.Testmebranch (3) failed!!!
 ****************** tests.TestmeLong (3) failed!!!
+****************** bubblesort.BubbleSort (3) failed!!!

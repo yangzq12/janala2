@@ -1,3 +1,0 @@
-OPTION "produce-models";
-CHECKSAT  TRUE ;
-COUNTERMODEL;

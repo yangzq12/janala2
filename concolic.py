@@ -64,7 +64,8 @@ def concolic ():
         print "[Input {} at ({}, {}, {}, {}, {})]".format(i, dt.day, dt.hour, dt.minute, dt.second, dt.microsecond)
         sys.stdout.flush()
         subprocess.call(cmd1List, shell=windows)
-        if isOffline:
+        i=i+1
+'''        if isOffline:
             print "..."
             cmd2 = "java -Xmx4096M -Xms2048M -Djanala.conf="+catg_home+"catg.conf -Djanala.mainClass="+yourpgm+" -Djanala.iteration="+str(i)+" -cp "+classpath+" -ea janala.interpreters.LoadAndExecuteInstructions"
             if verbose:
@@ -84,7 +85,7 @@ def concolic ():
             return
     with open("../test.log", 'a') as f:
         f.write("****************** {} ({}) failed!!!\n".format(yourpgm, iters))
-
+'''
 def remove(file):
     try:
         os.remove(file)
@@ -126,6 +127,7 @@ catg_home = os.path.abspath(os.path.dirname(__file__)).replace("\\","/")+"/"
 classpath = (catg_home + "build/classes/java/integration" + sep 
              + catg_home + "lib/asm-all-5.0.4.jar" + sep
              + catg_home+"lib/automaton-1.11-8.jar" + sep
+             + "/Users/Pig-yang/Downloads/calfuzzer/classes" + sep
              + catg_home+"lib/catg-dev.jar")
 args = getArguments()
 iters = args.maxIterations
